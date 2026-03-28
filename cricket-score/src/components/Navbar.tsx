@@ -3,8 +3,10 @@ import { Menu, X, Trophy } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = ["Home", "Live Scores", "Matches", "Teams", "Points Table", "Videos", "Sponsors"];
-const REVEAL_SECTION_ID = "match-setup";
+const LIVE_SCORES_ROUTE = "/live-scores";
+const REVEAL_MATCH_ROUTE = "/reveal-match";
 const POINTS_TABLE_ROUTE = "/points-table";
+const MATCHES_ROUTE = "/matches";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +25,7 @@ const Navbar = () => {
     }
 
     if (location.pathname !== "/") {
-      navigate(`/#${id}`);
+      navigate("/", { state: { scrollTarget: id } });
     } else {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
@@ -35,12 +37,18 @@ const Navbar = () => {
     setOpen(false);
   };
 
+  const openMatches = () => {
+    navigate(MATCHES_ROUTE);
+    setOpen(false);
+  };
+
+  const openLiveScores = () => {
+    navigate(LIVE_SCORES_ROUTE);
+    setOpen(false);
+  };
+
   const revealMatch = () => {
-    if (location.pathname !== "/") {
-      navigate(`/#${REVEAL_SECTION_ID}`);
-    } else {
-      scrollTo(REVEAL_SECTION_ID);
-    }
+    navigate(REVEAL_MATCH_ROUTE);
     setOpen(false);
   };
 
@@ -59,6 +67,10 @@ const Navbar = () => {
               onClick={() =>
                 item === "Points Table"
                   ? openPointsTable()
+                  : item === "Matches"
+                    ? openMatches()
+                    : item === "Live Scores"
+                      ? openLiveScores()
                   : scrollTo(item.toLowerCase().replace(/\s+/g, "-"))
               }
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
@@ -93,6 +105,10 @@ const Navbar = () => {
               onClick={() =>
                 item === "Points Table"
                   ? openPointsTable()
+                  : item === "Matches"
+                    ? openMatches()
+                    : item === "Live Scores"
+                      ? openLiveScores()
                   : scrollTo(item.toLowerCase().replace(/\s+/g, "-"))
               }
               className="block w-full text-left text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"

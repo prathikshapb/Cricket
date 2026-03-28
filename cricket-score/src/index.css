@@ -6,50 +6,50 @@
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 100%;
+    --background: 38 45% 94%;
+    --foreground: 30 52% 22%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 100%;
+    --card: 36 44% 97%;
+    --card-foreground: 30 52% 22%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 36 44% 97%;
+    --popover-foreground: 30 52% 22%;
 
-    --primary: 0 100% 62%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 30 52% 35%;
+    --primary-foreground: 38 45% 96%;
 
-    --secondary: 51 100% 50%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 29 45% 49%;
+    --secondary-foreground: 38 45% 96%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 66%;
+    --muted: 36 35% 88%;
+    --muted-foreground: 31 22% 40%;
 
-    --accent: 51 100% 50%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 33 45% 61%;
+    --accent-foreground: 30 52% 22%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 51 100% 50%;
+    --border: 32 28% 74%;
+    --input: 32 28% 74%;
+    --ring: 30 52% 35%;
 
     --radius: 0.75rem;
 
-    --ipl-navy: 0 0% 5%;
-    --ipl-gold: 51 100% 50%;
+    --ipl-navy: 30 52% 22%;
+    --ipl-gold: 30 52% 35%;
     --ipl-red: 0 72% 51%;
-    --ipl-green: 51 100% 50%;
-    --ipl-surface: 0 0% 10%;
+    --ipl-green: 29 45% 49%;
+    --ipl-surface: 36 44% 97%;
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 100% 62%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 51 100% 50%;
-    --sidebar-accent-foreground: 0 0% 5%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 51 100% 50%;
+    --sidebar-background: 36 44% 97%;
+    --sidebar-foreground: 30 52% 22%;
+    --sidebar-primary: 30 52% 35%;
+    --sidebar-primary-foreground: 38 45% 96%;
+    --sidebar-accent: 33 45% 61%;
+    --sidebar-accent-foreground: 30 52% 22%;
+    --sidebar-border: 32 28% 74%;
+    --sidebar-ring: 30 52% 35%;
   }
 }
 
@@ -69,21 +69,21 @@
 
 @layer utilities {
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(0 100% 62%), hsl(51 100% 50%));
+    background: linear-gradient(135deg, hsl(30 52% 35%), hsl(33 45% 61%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .bg-gradient-navy {
-    background: linear-gradient(180deg, hsl(0 100% 62% / 0.16), hsl(0 0% 5%));
+    background: linear-gradient(180deg, hsl(33 45% 61% / 0.4), hsl(38 45% 94%));
   }
 
   .bg-gradient-card {
-    background: linear-gradient(145deg, hsl(0 0% 10%), hsl(0 0% 5%));
+    background: linear-gradient(145deg, hsl(36 44% 97%), hsl(36 38% 91%));
   }
 
   .glow-gold {
-    box-shadow: 0 0 30px hsl(51 100% 50% / 0.33);
+    box-shadow: 0 0 30px hsl(29 45% 49% / 0.3);
   }
 
   .live-pulse {
@@ -205,13 +205,13 @@
 
   @keyframes reveal-glow {
     0% {
-      box-shadow: 0 0 0 rgba(255, 215, 0, 0);
+      box-shadow: 0 0 0 rgba(181, 122, 69, 0);
     }
     35% {
-      box-shadow: 0 0 34px rgba(255, 215, 0, 0.5);
+      box-shadow: 0 0 34px rgba(181, 122, 69, 0.45);
     }
     100% {
-      box-shadow: 0 0 16px rgba(255, 215, 0, 0.33);
+      box-shadow: 0 0 16px rgba(181, 122, 69, 0.3);
     }
   }
 
@@ -223,17 +223,17 @@
     0% {
       transform: scale(0.82) translateY(8px);
       opacity: 0.55;
-      text-shadow: 0 0 0 rgba(255, 215, 0, 0);
+      text-shadow: 0 0 0 rgba(181, 122, 69, 0);
     }
     60% {
       transform: scale(1.08) translateY(-2px);
       opacity: 1;
-      text-shadow: 0 0 18px rgba(255, 215, 0, 0.65);
+      text-shadow: 0 0 18px rgba(181, 122, 69, 0.55);
     }
     100% {
       transform: scale(1) translateY(0);
       opacity: 1;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+      text-shadow: 0 0 10px rgba(181, 122, 69, 0.35);
     }
   }
 
@@ -278,19 +278,19 @@
   @keyframes vs-pop {
     0% {
       transform: scale(1);
-      text-shadow: 0 0 0 rgba(255, 215, 0, 0);
+      text-shadow: 0 0 0 rgba(181, 122, 69, 0);
     }
     25% {
       transform: scale(1.85);
-      text-shadow: 0 0 28px rgba(255, 215, 0, 0.65);
+      text-shadow: 0 0 28px rgba(181, 122, 69, 0.55);
     }
     72% {
       transform: scale(1.85);
-      text-shadow: 0 0 28px rgba(255, 215, 0, 0.65);
+      text-shadow: 0 0 28px rgba(181, 122, 69, 0.55);
     }
     100% {
       transform: scale(1);
-      text-shadow: 0 0 0 rgba(255, 215, 0, 0);
+      text-shadow: 0 0 0 rgba(181, 122, 69, 0);
     }
   }
 

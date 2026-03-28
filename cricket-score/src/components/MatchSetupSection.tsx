@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { loadMatchScheduleSnapshot, saveMatchScheduleSnapshot } from "@/lib/matchScheduleStorage";
 
 type MatchSlot = {
   slot: number;
@@ -41,11 +42,17 @@ const buildSchedulePlan = () => {
 };
 
 const MatchSetupSection = () => {
+  const storedSnapshot = loadMatchScheduleSnapshot();
   const [teamInput, setTeamInput] = useState("");
-  const [slotToTeamName, setSlotToTeamName] = useState<(string | null)[]>(EMPTY_SLOTS);
+  const [slotToTeamName, setSlotToTeamName] = useState<(string | null)[]>(
+    storedSnapshot?.slotToTeamName?.length === TEAM_LABELS.length ? storedSnapshot.slotToTeamName : EMPTY_SLOTS,
+  );
   const [lastAssignedSlot, setLastAssignedSlot] = useState<number | null>(null);
-  const [schedulePlan, setSchedulePlan] = useState<MatchSlot[]>(() => buildSchedulePlan() ?? []);
-  const [revealedMatches, setRevealedMatches] = useState<MatchSlot[]>([]);
+  const [schedulePlan, setSchedulePlan] = useState<MatchSlot[]>(() => storedSnapshot?.schedulePlan ?? buildSchedulePlan() ?? []);
+  const [revealedMatches, setRevealedMatches] = useState<MatchSlot[]>(() => {
+    if (!storedSnapshot?.schedulePlan?.length || !storedSnapshot?.revealedCount) return [];
+    return storedSnapshot.schedulePlan.slice(0, Math.max(0, storedSnapshot.revealedCount));
+  });
   const [error, setError] = useState<string | null>(null);
   const [isSpinningAssignment, setIsSpinningAssignment] = useState(false);
   const [spinnerStep, setSpinnerStep] = useState(0);
@@ -245,6 +252,14 @@ const MatchSetupSection = () => {
     [],
   );
 
+  useEffect(() => {
+    saveMatchScheduleSnapshot({
+      slotToTeamName,
+      schedulePlan,
+      revealedCount: revealedMatches.length,
+    });
+  }, [slotToTeamName, schedulePlan, revealedMatches.length]);
+
   const spinAssignTeam = () => {
     const cleanName = teamInput.trim();
     if (!cleanName) {
@@ -368,7 +383,7 @@ const MatchSetupSection = () => {
   };
 
   return (
-    <section id="match-setup" className="px-4 py-16">
+    <section id="match-setup" className="px-4 pt-6 pb-16">
       <div className="container mx-auto space-y-6">
         <div className="text-center">
           <h2 className="font-heading text-3xl font-bold uppercase text-foreground md:text-4xl">Cricket Match Scheduler</h2>
@@ -423,13 +438,13 @@ const MatchSetupSection = () => {
               </button>
             </div>
 
-            <div className="rounded-xl border border-primary/40 bg-[linear-gradient(160deg,rgba(255,215,0,0.12),rgba(0,0,0,0.45))] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+            <div className="rounded-xl border border-primary/40 bg-[linear-gradient(160deg,rgba(200,155,109,0.26),rgba(181,122,69,0.12))] p-4 shadow-[0_10px_24px_rgba(138,90,43,0.2)]">
               {lastAssignedSlot !== null && (
                 <p className="mb-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   Assigned: {slotToTeamName[lastAssignedSlot]} {"->"} Team {TEAM_LABELS[lastAssignedSlot]}
                 </p>
               )}
-              <div className="relative h-[72px] overflow-hidden rounded-xl border border-primary/25 bg-[linear-gradient(180deg,#0f0f12,#070709)]">
+              <div className="relative h-[72px] overflow-hidden rounded-xl border border-primary/25 bg-[linear-gradient(180deg,#f8efe2,#f2e4cf)]">
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-5 bg-gradient-to-b from-background to-transparent" />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-gradient-to-t from-background to-transparent" />
                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-primary/20" />
@@ -459,7 +474,7 @@ const MatchSetupSection = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border/70 bg-[linear-gradient(145deg,#141416,#0f0f11)] p-4 shadow-[0_10px_28px_rgba(0,0,0,0.34)] md:p-6">
+          <div className="rounded-2xl border border-border/70 bg-[linear-gradient(145deg,#faf3e8,#f1e4d0)] p-4 shadow-[0_10px_24px_rgba(138,90,43,0.16)] md:p-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="font-heading text-sm font-bold uppercase tracking-[0.08em] text-primary">Match Picker</p>
@@ -500,7 +515,7 @@ const MatchSetupSection = () => {
             )}
 
             {lastPicked && (
-              <div className="mt-4 rounded-xl border border-primary/40 bg-[linear-gradient(160deg,rgba(255,215,0,0.12),rgba(0,0,0,0.4))] p-3">
+              <div className="mt-4 rounded-xl border border-primary/40 bg-[linear-gradient(160deg,rgba(200,155,109,0.25),rgba(181,122,69,0.1))] p-3">
                 <p className="font-heading text-xs uppercase tracking-[0.14em] text-primary">Latest Match</p>
                 <p className="mt-1 font-heading text-sm font-bold uppercase tracking-[0.04em] text-foreground">
                   Slot {String(lastPicked.slot).padStart(2, "0")}: {TEAM_LABELS[lastPicked.team1]} ({teamNameForSlot(lastPicked.team1)}) vs {TEAM_LABELS[lastPicked.team2]} ({teamNameForSlot(lastPicked.team2)})
@@ -509,10 +524,10 @@ const MatchSetupSection = () => {
             )}
 
             {matchRevealPopup && (
-              <div className="mt-4 rounded-xl border border-primary/40 bg-black/45 p-4 shadow-[0_0_26px_rgba(255,215,0,0.2)]">
+              <div className="mt-4 rounded-xl border border-primary/40 bg-[linear-gradient(160deg,rgba(248,239,226,0.95),rgba(241,228,208,0.95))] p-4 shadow-[0_0_20px_rgba(181,122,69,0.18)]">
                 <p className="font-heading text-[11px] uppercase tracking-[0.2em] text-primary/80">Match Reveal</p>
                 <p className="mt-1 font-heading text-xs uppercase tracking-[0.14em] text-muted-foreground">Match {matchRevealPopup.matchNumber}</p>
-                <div className="mt-3 min-h-[120px] rounded-lg border border-primary/20 bg-[linear-gradient(180deg,#0f0f12,#070709)] p-3">
+                <div className="mt-3 min-h-[120px] rounded-lg border border-primary/20 bg-[linear-gradient(180deg,#fff9f1,#f6ead7)] p-3">
                   {matchRevealPhase === "loading" && (
                     <p className="live-pulse font-heading text-center text-xl font-black uppercase tracking-[0.14em] text-primary">Drawing Teams...</p>
                   )}
@@ -535,41 +550,6 @@ const MatchSetupSection = () => {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card/70 p-4 md:p-6">
-          <h3 className="mb-3 font-heading text-xl font-bold text-foreground">Match Display</h3>
-          <div className="space-y-3">
-            {Array.from({ length: TOTAL_MATCH_SLOTS }, (_, index) => {
-              const match = schedulePlan[index];
-              const isRevealed = index < revealedMatches.length;
-              if (!match) return null;
-
-              return (
-                <div
-                  key={index}
-                  className={cn(
-                    "grid gap-4 rounded-xl border border-border/70 bg-[linear-gradient(145deg,#141416,#0f0f11)] p-4 md:grid-cols-[170px_1fr] md:items-center",
-                    !isRevealed && "opacity-80",
-                  )}
-                >
-                  <div className="md:pr-3 md:border-r md:border-dashed md:border-border">
-                    <span className="inline-block rounded-sm border border-primary bg-primary/10 px-3 py-1 font-heading text-xs font-bold uppercase tracking-[0.08em] text-primary">
-                      Match {index + 1}
-                    </span>
-                  </div>
-
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <p className="font-heading text-lg font-bold uppercase tracking-[0.03em] text-foreground">{teamNameForSlot(match.team1)}</p>
-                      <p className="font-heading text-3xl font-black italic text-muted-foreground">Vs</p>
-                      <p className="font-heading text-lg font-bold uppercase tracking-[0.03em] text-foreground">{teamNameForSlot(match.team2)}</p>
-                    </div>
-                  </div>
-
-                </div>
-              );
-            })}
-          </div>
-        </div>
       </div>
     </section>
   );

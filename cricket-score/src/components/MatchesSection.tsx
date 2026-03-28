@@ -1,54 +1,74 @@
-﻿import { CalendarDays, MapPin } from "lucide-react";
-import { TEAM_LOGOS } from "@/lib/logos";
+import { useMemo } from "react";
+import { cn } from "@/lib/utils";
+import { loadMatchScheduleSnapshot } from "@/lib/matchScheduleStorage";
 
-const upcomingMatches = [
-  { id: 1, team1: "CSK", team2: "RCB", date: "Mar 28, 2026", time: "7:30 PM IST", venue: "M.A. Chidambaram Stadium", link: "https://www.iplt20.com/matches/fixtures" },
-  { id: 2, team1: "MI", team2: "DC", date: "Mar 29, 2026", time: "3:30 PM IST", venue: "Wankhede Stadium", link: "https://www.iplt20.com/matches/fixtures" },
-  { id: 3, team1: "KKR", team2: "SRH", date: "Mar 29, 2026", time: "7:30 PM IST", venue: "Eden Gardens", link: "https://www.iplt20.com/matches/fixtures" },
-  { id: 4, team1: "RR", team2: "GT", date: "Mar 30, 2026", time: "7:30 PM IST", venue: "Sawai Mansingh Stadium", link: "https://www.iplt20.com/matches/fixtures" },
-  { id: 5, team1: "PBKS", team2: "LSG", date: "Mar 31, 2026", time: "7:30 PM IST", venue: "PCA Stadium, Mohali", link: "https://www.iplt20.com/matches/fixtures" },
-  { id: 6, team1: "RCB", team2: "MI", date: "Apr 1, 2026", time: "7:30 PM IST", venue: "M. Chinnaswamy Stadium", link: "https://www.iplt20.com/matches/fixtures" },
-];
+const TEAM_LABELS = Array.from({ length: 20 }, (_, index) => String.fromCharCode(65 + index));
+const DAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
 const MatchesSection = () => {
+  const snapshot = loadMatchScheduleSnapshot();
+
+  const matches = snapshot?.schedulePlan ?? [];
+  const revealedCount = snapshot?.revealedCount ?? 0;
+
+  const teamNameForSlot = useMemo(
+    () => (slotIndex: number) => snapshot?.slotToTeamName?.[slotIndex] ?? `Team ${TEAM_LABELS[slotIndex]}`,
+    [snapshot?.slotToTeamName],
+  );
+  const matchDateTime = useMemo(
+    () => (matchIndex: number) => {
+      const d = new Date(2026, 2, 28);
+      d.setDate(d.getDate() + matchIndex);
+      const dateText = `${MONTH_NAMES[d.getMonth()]} ${String(d.getDate()).padStart(2, "0")} • ${DAY_NAMES[d.getDay()]}`;
+      const timeText = matchIndex % 2 === 0 ? "3:30 PM" : "7:30 PM";
+      return `${dateText} • ${timeText}`;
+    },
+    [],
+  );
+
   return (
-    <section id="matches" className="py-16 px-4 bg-ipl-surface">
+    <section id="matches" className="pt-6 pb-16 px-4 bg-ipl-surface">
       <div className="container mx-auto">
         <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground uppercase mb-8 text-center">
-          Upcoming Matches
+          Matches
         </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {upcomingMatches.map((match, index) => (
-            <div
-              key={match.id}
-              className="bg-card rounded-xl border border-border p-5 hover:glow-gold transition-all duration-300 hover:-translate-y-1 animate-fade-up"
-              style={{ animationDelay: `${index * 80}ms` }}
-            >
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <img src={TEAM_LOGOS[match.team1]} alt={`${match.team1} logo`} className="w-9 h-9 object-contain" loading="lazy" />
-                  <span className="font-heading text-2xl font-bold text-foreground">{match.team1}</span>
+        {matches.length === 0 ? (
+          <div className="rounded-xl border border-border bg-card p-6 text-center text-muted-foreground">
+            No reveal schedule yet. Assign teams and reveal matches from the Reveal Match section.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {matches.map((match, index) => {
+              const isRevealed = index < revealedCount;
+              return (
+                <div
+                  key={match.slot}
+                  className={cn(
+                    "grid gap-4 rounded-xl border border-border/70 bg-[linear-gradient(145deg,#faf3e8,#f1e4d0)] p-4 md:grid-cols-[170px_1fr] md:items-center",
+                    !isRevealed && "opacity-80",
+                  )}
+                >
+                  <div className="md:pr-3 md:border-r md:border-dashed md:border-border">
+                    <span className="inline-block rounded-sm border border-primary bg-primary/10 px-3 py-1 font-heading text-xs font-bold uppercase tracking-[0.08em] text-primary">
+                      Match {index + 1}
+                    </span>
+                    <p className="mt-2 font-heading text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      {matchDateTime(index)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <p className="font-heading text-lg font-bold uppercase tracking-[0.03em] text-foreground">{teamNameForSlot(match.team1)}</p>
+                    <p className="font-heading text-3xl font-black italic text-muted-foreground">Vs</p>
+                    <p className="font-heading text-lg font-bold uppercase tracking-[0.03em] text-foreground">{teamNameForSlot(match.team2)}</p>
+                  </div>
                 </div>
-                <span className="font-heading text-sm text-primary font-bold">VS</span>
-                <div className="flex items-center gap-2">
-                  <img src={TEAM_LOGOS[match.team2]} alt={`${match.team2} logo`} className="w-9 h-9 object-contain" loading="lazy" />
-                  <span className="font-heading text-2xl font-bold text-foreground">{match.team2}</span>
-                </div>
-              </div>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2 justify-center">
-                  <CalendarDays className="w-4 h-4" />
-                  <span>{match.date} • {match.time}</span>
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  <MapPin className="w-4 h-4" />
-                  <span>{match.venue}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

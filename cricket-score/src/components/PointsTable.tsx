@@ -15,7 +15,7 @@ const standings = [
 
 const PointsTable = () => {
   return (
-    <section id="points-table" className="py-16 px-4">
+    <section id="points-table" className="pt-6 pb-16 px-4">
       <div className="container mx-auto">
         <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground uppercase mb-8 text-center">
           Points Table

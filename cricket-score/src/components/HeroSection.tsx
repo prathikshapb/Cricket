@@ -1,7 +1,10 @@
-﻿import heroBg from "@/assets/Screenshot 2026-03-25 123126.png";
+import heroBg from "@/assets/Screenshot 2026-03-25 123126.png";
 import { CalendarDays, Tv } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section
       className="relative mt-16 flex min-h-[90vh] items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -22,13 +25,13 @@ const HeroSection = () => {
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-up" style={{ animationDelay: "300ms" }}>
           <button
-            onClick={() => document.getElementById("live-scores")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => navigate("/live-scores")}
             className="flex items-center gap-2 rounded-lg bg-primary px-8 py-3 font-heading text-lg font-semibold text-primary-foreground transition hover:brightness-110 animate-float-gentle"
           >
             <Tv className="h-5 w-5" /> Live Scores
           </button>
           <button
-            onClick={() => document.getElementById("matches")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => navigate("/matches")}
             className="flex items-center gap-2 rounded-lg border-2 border-primary px-8 py-3 font-heading text-lg font-semibold text-primary transition hover:bg-primary/10"
           >
             <CalendarDays className="h-5 w-5" /> Schedule
@@ -40,5 +43,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-
