@@ -1,4 +1,45 @@
+import azpireLogo from "@/assets/logo/azpire.png";
+import benchmarkLogo from "@/assets/logo/benchmark.png";
+import championsLogo from "@/assets/logo/champions.png";
+import dmperorLogo from "@/assets/logo/dmperor.png";
+import dynamicLogo from "@/assets/logo/dynamic.png";
+import fortuneLogo from "@/assets/logo/fortune.png";
+import gladiatorsLogo from "@/assets/logo/gladiators.png";
+import harmonyLogo from "@/assets/logo/harmony.png";
+import iconsLogo from "@/assets/logo/icons.png";
+import jaaguarLogo from "@/assets/logo/jaaguar.png";
+import kingsLogo from "@/assets/logo/kings.png";
+import legendsLogo from "@/assets/logo/legends.png";
+import millionaireLogo from "@/assets/logo/millionaire.png";
+import nestLogo from "@/assets/logo/nest.png";
+import pdaLogo from "@/assets/logo/pd a.png";
+import pdbLogo from "@/assets/logo/pd b.png";
+import princeLogo from "@/assets/logo/prince.png";
+import sparkLogo from "@/assets/logo/sparkp.png";
+import trichyALogo from "@/assets/logo/trichy a.png";
+import trichyBLogo from "@/assets/logo/trichy b.png";
+
 export const TEAM_LOGOS: Record<string, string> = {
+  AZP: azpireLogo,
+  BMK: benchmarkLogo,
+  CHP: championsLogo,
+  DYN: dynamicLogo,
+  EMP: dmperorLogo,
+  FOR: fortuneLogo,
+  GLD: gladiatorsLogo,
+  HMY: harmonyLogo,
+  ICN: iconsLogo,
+  JAG: jaaguarLogo,
+  KNG: kingsLogo,
+  LGD: legendsLogo,
+  MLN: millionaireLogo,
+  NST: nestLogo,
+  PRC: princeLogo,
+  SPK: sparkLogo,
+  PDA: pdaLogo,
+  PDB: pdbLogo,
+  TRA: trichyALogo,
+  TRB: trichyBLogo,
   CSK: "https://documents.iplt20.com/ipl/CSK/Logos/Roundbig/CSKroundbig.png",
   DC: "https://documents.iplt20.com/ipl/DC/Logos/Roundbig/DCroundbig.png",
   GT: "https://documents.iplt20.com/ipl/GT/Logos/Roundbig/GTroundbig.png",

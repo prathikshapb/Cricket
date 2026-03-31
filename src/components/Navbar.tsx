@@ -3,9 +3,9 @@ import { Menu, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import brandImage from "../assets/Cricket_logo.png";
 
-const navItems = ["Home", "Live Scores", "Matches", "Groups", "Teams", "Points Table", "Videos", "Sponsors"];
+const navItems = ["Home", "Live Scores", "Matches", "Group", "Teams", "Points Table", "Videos", "Sponsors"];
 const LIVE_SCORES_ROUTE = "/live-scores";
-const REVEAL_MATCH_ROUTE = "/reveal-match";
+const REGISTER_ROUTE = "/register";
 const POINTS_TABLE_ROUTE = "/points-table";
 const MATCHES_ROUTE = "/matches";
 const GROUP_ROUTE = "/group";
@@ -54,19 +54,19 @@ const Navbar = () => {
     setOpen(false);
   };
 
-  const revealMatch = () => {
-    navigate(REVEAL_MATCH_ROUTE);
+  const openRegister = () => {
+    navigate(REGISTER_ROUTE);
     setOpen(false);
   };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-[linear-gradient(180deg,rgba(222,218,210,0.96),rgba(210,201,182,0.94))] shadow-[0_8px_24px_rgba(80,71,41,0.2)] backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center pt-3">
+        <div className="flex items-center">
           <img
             src={brandImage}
             alt="Brand logo"
-            className="h-32 w-auto object-contain mix-blend-multiply contrast-125 saturate-125 brightness-95 drop-shadow-[0_4px_10px_rgba(80,71,41,0.22)] md:h-36"
+            className="h-20 w-auto object-contain mix-blend-multiply contrast-125 saturate-125 brightness-95 drop-shadow-[0_4px_10px_rgba(80,71,41,0.22)] md:h-24"
           />
         </div>
 
@@ -79,7 +79,7 @@ const Navbar = () => {
                   ? openPointsTable()
                   : item === "Matches"
                     ? openMatches()
-                    : item === "Groups"
+                    : item === "Group"
                       ? openGroup()
                       : item === "Live Scores"
                         ? openLiveScores()
@@ -91,10 +91,10 @@ const Navbar = () => {
             </button>
           ))}
           <button
-            onClick={revealMatch}
-            className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            onClick={openRegister}
+            className="gold-button text-sm"
           >
-            Reveal Match
+            Register
           </button>
         </div>
 
@@ -106,10 +106,10 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden bg-card border-b border-border px-4 pb-4 space-y-3">
           <button
-            onClick={revealMatch}
-            className="block w-full rounded-md py-2 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            onClick={openRegister}
+            className="gold-button block w-full text-center text-sm"
           >
-            Reveal Match
+            Register
           </button>
           {navItems.map((item) => (
             <button
@@ -119,7 +119,7 @@ const Navbar = () => {
                   ? openPointsTable()
                   : item === "Matches"
                     ? openMatches()
-                    : item === "Groups"
+                    : item === "Group"
                       ? openGroup()
                       : item === "Live Scores"
                         ? openLiveScores()

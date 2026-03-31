@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { TEAM_SQUADS } from "@/data/teamSquads";
+import { TEAM_LOGOS } from "@/lib/logos";
 
 type TeamMember = {
   name: string;
@@ -39,6 +40,7 @@ const initialsFromName = (value: string) =>
 
 const TeamsSection = () => {
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [logoErrors, setLogoErrors] = useState<Record<string, boolean>>({});
   const selectedTeamIndex = selectedTeam ? teams.findIndex((team) => team.short === selectedTeam.short) : -1;
   const selectedTeamColor =
     selectedTeamIndex >= 0 ? CARD_COLORS[selectedTeamIndex % CARD_COLORS.length] : CARD_COLORS[0];
@@ -92,7 +94,17 @@ const TeamsSection = () => {
                       background: `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.65), ${color}33)`,
                     }}
                   >
-                    {initialsFromName(team.name)}
+                    {TEAM_LOGOS[team.short] && !logoErrors[team.short] ? (
+                      <img
+                        src={TEAM_LOGOS[team.short]}
+                        alt={`${team.name} logo`}
+                        className="h-12 w-12 rounded-full object-contain"
+                        loading="lazy"
+                        onError={() => setLogoErrors((prev) => ({ ...prev, [team.short]: true }))}
+                      />
+                    ) : (
+                      initialsFromName(team.name)
+                    )}
                   </div>
                   <h3 className="font-heading text-sm font-semibold leading-tight text-foreground">{team.name}</h3>
                   <p className="mt-1 text-xs text-muted-foreground">{team.captain}</p>
@@ -128,7 +140,17 @@ const TeamsSection = () => {
             <div className="mb-6 flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-primary/60 bg-primary/15 font-heading text-sm font-bold text-foreground">
-                  {initialsFromName(selectedTeam.name)}
+                  {TEAM_LOGOS[selectedTeam.short] && !logoErrors[selectedTeam.short] ? (
+                    <img
+                      src={TEAM_LOGOS[selectedTeam.short]}
+                      alt={`${selectedTeam.name} logo`}
+                      className="h-11 w-11 rounded-full object-contain"
+                      loading="lazy"
+                      onError={() => setLogoErrors((prev) => ({ ...prev, [selectedTeam.short]: true }))}
+                    />
+                  ) : (
+                    initialsFromName(selectedTeam.name)
+                  )}
                 </div>
                 <div>
                   <h3 className="font-heading text-2xl text-foreground">{selectedTeam.name}</h3>

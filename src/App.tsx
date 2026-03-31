@@ -5,8 +5,8 @@ import NotFound from "./pages/NotFound.tsx";
 import PointsTablePage from "./pages/PointsTablePage.tsx";
 import MatchesPage from "./pages/MatchesPage.tsx";
 import LiveScoresPage from "./pages/LiveScoresPage.tsx";
-import RevealMatchPage from "./pages/RevealMatchPage.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -24,7 +24,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/live-scores" element={<LiveScoresPage />} />
-      <Route path="/reveal-match" element={<RevealMatchPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="/group" element={<GroupPage />} />
       <Route path="/points-table" element={<PointsTablePage />} />
       <Route path="/matches" element={<MatchesPage />} />

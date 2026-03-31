@@ -1,4 +1,4 @@
-import heroBg from "@/assets/BNI_wallpaper2.png";
+import heroBg from "@/assets/BNI bg3.jpg.jpeg";
 import { CalendarDays, Tv } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,8 +7,8 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative mt-16 flex min-h-[90vh] items-center justify-center overflow-hidden bg-cover bg-no-repeat"
-      style={{ backgroundImage: `url(${heroBg})`, backgroundPosition: "center -108px" }}
+      className="relative mt-16 flex min-h-[90vh] items-center justify-center overflow-hidden bg-no-repeat bg-[46%_-300px] bg-[length:103%_auto] md:bg-[45%_-360px] md:bg-[length:102%_auto] lg:bg-[44%_-420px] lg:bg-[length:101%_auto]"
+      style={{ backgroundImage: `url(${heroBg})` }}
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(222,218,210,0.42)_0%,rgba(222,218,210,0.24)_48%,rgba(80,71,41,0.08)_100%)]" />
 
