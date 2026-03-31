@@ -39,6 +39,9 @@ const initialsFromName = (value: string) =>
 
 const TeamsSection = () => {
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const selectedTeamIndex = selectedTeam ? teams.findIndex((team) => team.short === selectedTeam.short) : -1;
+  const selectedTeamColor =
+    selectedTeamIndex >= 0 ? CARD_COLORS[selectedTeamIndex % CARD_COLORS.length] : CARD_COLORS[0];
 
   useEffect(() => {
     if (!selectedTeam) {
@@ -146,24 +149,38 @@ const TeamsSection = () => {
               {selectedTeam.members.map((player, index) => (
                 <div
                   key={player.name}
-                  className="flex items-center gap-3 rounded-xl border border-[#A48A43]/30 bg-white/82 p-4 animate-fade-up"
-                  style={{ animationDelay: `${index * 35}ms` }}
+                  className="flex items-center gap-3 rounded-xl border p-4 animate-fade-up transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    background: `linear-gradient(160deg, ${selectedTeamColor}2B 0%, ${selectedTeamColor}17 55%, rgba(80, 71, 41, 0.72) 100%)`,
+                    borderColor: `${selectedTeamColor}88`,
+                    boxShadow: `0 0 18px ${selectedTeamColor}24`,
+                    animationDelay: `${index * 35}ms`,
+                  }}
                 >
                   {player.img ? (
                     <img
                       src={player.img}
                       alt={player.name}
-                      className="h-16 w-16 rounded-full border border-white/20 object-cover"
+                      className="h-16 w-16 rounded-full object-cover"
+                      style={{
+                        border: `2px solid ${selectedTeamColor}AA`,
+                      }}
                       loading="lazy"
                     />
                   ) : (
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-primary/20 font-heading text-sm font-bold text-foreground">
+                    <div
+                      className="flex h-16 w-16 items-center justify-center rounded-full font-heading text-sm font-bold text-foreground"
+                      style={{
+                        border: `2px solid ${selectedTeamColor}AA`,
+                        background: `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.65), ${selectedTeamColor}33)`,
+                      }}
+                    >
                       {initialsFromName(player.name)}
                     </div>
                   )}
                   <div>
                     <p className="font-heading text-foreground">{player.name}</p>
-                    <p className="text-xs font-semibold text-primary">{player.role}</p>
+                    <p className="text-xs font-semibold text-[#504729]">{player.role}</p>
                     <p className="mt-1 text-xs text-muted-foreground">{player.info}</p>
                   </div>
                 </div>
